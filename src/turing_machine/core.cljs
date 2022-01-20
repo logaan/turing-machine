@@ -113,6 +113,7 @@
     (sab/html
      [:div
       [:h1 "Turing machine"]
+      [:p [:a {:href "https://github.com/logaan/turing-machine"} "Source on Github"]]
       [:pre
        [:table
         [:thead

@@ -11,6 +11,7 @@
                  [org.clojure/core.async  "0.4.500"]
                  [cljsjs/react "16.6.0-0"]
                  [cljsjs/react-dom "16.6.0-0"]
+                 [cljsjs/create-react-class "15.6.3-1"]
                  [sablono "0.8.6"]]
 
   :plugins [[lein-figwheel "0.5.20"]
@@ -45,10 +46,15 @@
                ;; lein cljsbuild once min
                {:id "min"
                 :source-paths ["src"]
-                :compiler {:output-to "resources/public/js/compiled/turing_machine.js"
-                           :main turing-machine.core
+                :compiler {:main turing-machine.core
+                           :asset-path "js/compiled/out"
+                           :output-to "docs/js/compiled/turing_machine.js"
+                           :source-map-timestamp true
                            :optimizations :advanced
-                           :pretty-print false}}]}
+                           ;; To console.log CLJS data-structures make sure you enable devtools in Chrome
+                           ;; https://github.com/binaryage/cljs-devtools
+                           :preloads [devtools.preload]
+                           :verbose true}}]}
 
   :figwheel {;; :http-server-root "public" ;; default and assumes "resources"
              ;; :server-port 3449 ;; default

@@ -1,27 +1,32 @@
 (ns turing-machine.core
     (:require [react]
               [react-dom]
+              [cljsjs.create-react-class]
               [sablono.core :as sab :include-macros true]))
 
 (enable-console-print!)
 
-(println "This text is printed from src/turing-machine/core.cljs. Go ahead and edit it and see reloading in action.")
+(def initial-state
+  {:text "Hello world!"})
 
-;; define your app data so that it doesn't get over-written on reload
-
-(defonce app-state (atom {:text "Hello world!"}))
+(defonce app-state (atom initial-state))
 
 (defn hello-world [state]
   (sab/html [:div
              [:h1 (:text @state)]
              [:h3 "Edit this and watch it change!"]]))
 
-(js/ReactDOM.render
- (hello-world app-state)
- (. js/document (getElementById "app")))
-
 (defn on-js-reload []
-  ;; optionally touch your app-state to force rerendering depending on
-  ;; your application
-  ;; (swap! app-state update-in [:__figwheel_counter] inc)
-)
+  (reset! app-state initial-state))
+
+;; React interop and boostrapping
+(def class
+  (js/createReactClass
+   #js {:render #(hello-world app-state)}))
+
+(def component
+  (js/ReactDOM.render
+   (js/React.createElement class #js {})
+   (. js/document (getElementById "app"))))
+
+(add-watch app-state :force-update #(.forceUpdate component))
